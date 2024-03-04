@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="fontawesome-free-6.2.1-web/css/all.min.css">
+    <link rel="stylesheet" href="addtocart.css">
+    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<section class="h-100 h-custom" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body p-4">
+
+                        <div class="row">
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div>
+                                    <p class="mb-1">Shopping cart</p>
+                                </div>
+                                <div>
+                                    <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!"
+                                                                                               class="text-body">price <i
+                                            class="fas fa-angle-down mt-1"></i></a></p>
+                                </div>
+                            </div>
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex flex-row align-items-center">
+                                            <!-- Product details go here -->
+                                            <div class="ms-3">
+                                                <h5 id="productName">Product Name</h5>
+                                                <p class="small mb-0">Price: $20.00</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="my-4">
+                                    <button type="button" class="btn btn-info btn-block btn-lg" onclick="toggleCheckoutForm()">Checkout</button>
+                                    <div class="col-lg-10">
+                                        <h5 class="mb-1"><a href="shopping.html" class="text-body"><i
+                                                class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Checkout form goes here (initially hidden) -->
+                            <div id="checkoutForm" style="display: none;">
+                                <h2>Checkout</h2>
+                                <div class="form-group">
+                                    <label for="productName">Product Name</label>
+                                    <input type="text" class="form-control" id="productName" readonly>
+                                </div>
+
+                                <!-- Subtotal, Shipping, Total go here -->
+                                <div class="form-group">
+                                    <label for="subtotal">Subtotal</label>
+                                    <input type="text" class="form-control" id="subtotal" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="shipping">Shipping</label>
+                                    <input type="text" class="form-control" id="shipping" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="total">Total</label>
+                                    <input type="text" class="form-control" id="total" readonly>
+                                </div>
+
+                                <!-- Payment method buttons and checkboxes -->
+                                <div class="form-group">
+                                    <label for="paymentMethod">Payment Method</label>
+                                    <div class="btn-group" role="group" aria-label="Payment Method">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="cashCheckbox" onclick="toggleCashForm()">
+                                            <label class="form-check-label" for="cashCheckbox">Cash</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="visaCheckbox" onclick="toggleCreditCardForm()">
+                                            <label class="form-check-label" for="visaCheckbox">Visa</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Credit card details form (initially hidden) -->
+                                <div id="creditCardForm" style="display: none;">
+                                    <h4>Enter Credit Card Details</h4>
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="cardNumber">Card Number</label>
+                                            <input type="text" class="form-control" id="cardNumber" placeholder="Enter card number" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="cardHolderName">Cardholder Name</label>
+                                            <input type="text" class="form-control" id="cardHolderName" placeholder="Enter cardholder name" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="cvv">CVV</label>
+                                            <input type="text" class="form-control" id="cvv" placeholder="Enter CVV" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="expiryDate">Expiration Date</label>
+                                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-info">Place Order</button>
+                                    </form>
+                                </div>
+                                <button class="btn btn-secondary mt-3" onclick="toggleCheckoutForm()">Cancel</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function toggleCheckoutForm() {
+        const checkoutForm = document.getElementById('checkoutForm');
+        checkoutForm.style.display = (checkoutForm.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function toggleCashForm() {
+        const cashCheckbox = document.getElementById('cashCheckbox');
+        const visaCheckbox = document.getElementById('visaCheckbox');
+        const creditCardForm = document.getElementById('creditCardForm');
+
+        if (cashCheckbox.checked) {
+            // Uncheck Visa checkbox and hide credit card form
+            visaCheckbox.checked = false;
+            creditCardForm.style.display = 'none';
+        }
+    }
+
+    function toggleCreditCardForm() {
+        const cashCheckbox = document.getElementById('cashCheckbox');
+        const visaCheckbox = document.getElementById('visaCheckbox');
+        const creditCardForm = document.getElementById('creditCardForm');
+
+        if (visaCheckbox.checked) {
+            // Uncheck Cash checkbox and show credit card form
+            cashCheckbox.checked = false;
+            creditCardForm.style.display = 'block';
+        } else {
+            // Hide credit card form if Visa checkbox is unchecked
+            creditCardForm.style.display = 'none';
+        }
+    }
+
+    function prepareCheckout() {
+        const productName = document.getElementById('productName');
+        const subtotal = document.getElementById('subtotal');
+        const shipping = document.getElementById('shipping');
+        const total = document.getElementById('total');
+
+        // Replace these values with your actual product details
+        productName.value = "Product 1";
+        subtotal.value = "$20.00";
+        shipping.value = "$5.00";
+        total.value = "$25.00";
+    }
+</script>
+
+</body>
+</html>

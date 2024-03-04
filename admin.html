@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <title>Admin Page</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Page</h1>
+    
+    <!-- Add Product Form -->
+    <form id="addProductForm">
+      <label for="productName">Product Name:</label>
+      <input type="text" id="productName" required>
+      
+      <label for="productPrice">Product Price:</label>
+      <input type="number" id="productPrice" required>
+
+      <label for="productSize">Product Size:</label>
+      <select id="productSize">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+
+      <label for="productColor">Product Color:</label>
+      <input type="text" id="productColor" placeholder="Enter color name" required>
+
+      <button type="submit">Add Product</button>
+    </form>
+
+    <!-- Stock Section -->
+    <div id="stockSection">
+      <h2>Product Stock</h2>
+      <ul id="stockList">
+        <!-- Dynamic stock items will be displayed here -->
+      </ul>
+    </div>
+
+    <!-- Orders Section -->
+    <div id="ordersSection">
+      <h2>Orders</h2>
+      <ul>
+        <!-- Dynamic order items will be displayed here -->
+        <li>No new orders at the moment.</li>
+      </ul>
+    </div>
+
+    <!-- Product List -->
+    <div id="productList">
+      <!-- Product items will be displayed here -->
+    </div>
+  </div>
+
+  <script>
+    // Simulated product stock data
+    const productStock = {
+      'ICONS HOODIE (CREAM)': { S: 10, M: 15, L: 20 },
+      'COLLECTIVE SKY BLUE HOODIE': { S: 12, M: 18, L: 25 },
+      'LOUDIES HOODIE (BLACK)': { S: 8, M: 10, L: 15 },
+      'LIVIN\' LOKAL HOODIE (RED)': { S: 5, M: 8, L: 12 },
+      'ASTRO HOODIE (PINK PANTHER)': { S: 15, M: 20, L: 30 },
+      'ASTRO HOODIE (CREAM)': { S: 18, M: 25, L: 35 },
+      'HOODIE ASTRO (MOCHA)': { S: 10, M: 15, L: 20 },
+      'LIVIN\' LOKAL HOODIE (BLUE)': { S: 12, M: 18, L: 25 },
+      'CREW ASTRO (FOREST GREEN)': { S: 8, M: 12, L: 18 },
+      'PROTAGONIST HOODIE- BLACK': { S: 20, M: 30, L: 40 },
+      'PROTAGONIST HOODIE- PEPSI BLUE': { S: 15, M: 25, L: 35 },
+      'PROTAGONIST HOODIE- GREY': { S: 10, M: 18, L: 25 },
+      'PROTAGONIST HOODIE- BONDI BLUE': { S: 12, M: 20, L: 30 },
+    };
+
+    function displayStock() {
+      const stockListContainer = document.getElementById('stockList');
+      stockListContainer.innerHTML = '';
+
+      for (const productName in productStock) {
+        const stockItem = document.createElement('li');
+        stockItem.innerHTML = `<strong>${productName}</strong> - 
+                              <span>S: ${productStock[productName]['S']}</span>, 
+                              <span>M: ${productStock[productName]['M']}</span>, 
+                              <span>L: ${productStock[productName]['L']}</span>`;
+        stockListContainer.appendChild(stockItem);
+      }
+    }
+
+    // Initial display
+    displayStock();
+  </script>
+</body>
+</html>

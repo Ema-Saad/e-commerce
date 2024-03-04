@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Shopping Cart</title>
+    <style>
+        /* Add your styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #cart {
+            max-width: 400px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 10px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: none; /* Initially hide the cart */
+            z-index: 999; /* Ensure the cart is on top */
+            background-color: #fff;
+        }
+
+        #cart.active {
+            display: block; /* Show the cart when active class is present */
+        }
+
+        #cart-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        #cart-icon img {
+            width: 30px;
+            height: auto;
+          
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        #cart-items img {
+            width: 30px;
+            height: auto;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .cart-item button {
+            cursor: pointer;
+            background-color: #ff5c5c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+
+        .products-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .image-container {
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+            max-height: 200px; /* Set a max-height for the image container */
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%; /* Ensure the image fills the container */
+            object-fit: cover; /* Maintain aspect ratio and cover the container */
+            border-radius: 10px 10px 0 0;
+        }
+
+        .container {
+            padding: 10px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .price {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .add-to-cart {
+            cursor: pointer;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+
+        .search-bar {
+            margin: 20px auto;
+            padding: 10px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .search-input {
+            width: 80%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+  <div id="cart-icon" onclick="toggleCart(event)">
+        <img src="https://img.icons8.com/material-outlined/24/000000/shopping-cart.png" alt="Shopping Cart">
+        <span id="cart-count">0</span>
+    </div>
+
+    <div id="cart">
+        <h2>Shopping Cart</h2>
+        <div id="cart-items"></div>
+        <p>Total: LE <span id="total">0.00</span></p>
+        <button onclick="clearCart()">Clear Cart</button>
+        
+        <a href="addtocard.html" class="btn"><button onclick="checkout()">cart</button></a>
+    </div>
+
+
+<div class="search-bar">
+    <input type="text" class="search-input" placeholder="Search products..." oninput="filterProducts(this.value)">
+</div>
+
+<div id="products" class="products-container">
+    <!-- Products will be dynamically added here -->
+</div>
+
+<script>
+    let cart = [];
+    let cartVisible = false;
+
+    function addToCart(productName, price, image) {
+        const item = { productName, price, image };
+        cart.push(item);
+        updateCart();
+        
+    }
+
+    function updateCart() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        const totalElement = document.getElementById('total');
+        const cartCountElement = document.getElementById('cart-count');
+        let total = 0;
+
+        // Clear previous cart items
+        cartItemsContainer.innerHTML = '';
+
+        // Add current cart items
+        cart.forEach((item, index) => {
+            const cartItemDiv = document.createElement('div');
+            cartItemDiv.classList.add('cart-item');
+            cartItemDiv.innerHTML = `<img src="${item.image}" alt="${item.productName}">
+                                     <div>
+                                        <span>${item.productName}</span>
+                                        <br>
+                                        <span>LE${item.price.toFixed(2)}</span>
+                                     </div>
+                                     <button onclick="removeFromCart(${index})">Remove</button>`;
+            cartItemsContainer.appendChild(cartItemDiv);
+
+            // Accumulate total price
+            total += item.price;
+        });
+
+        // Update the total price
+        totalElement.textContent = total.toFixed(2);
+        cartCountElement.textContent = cart.length;
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    function clearCart() {
+        cart = [];
+        updateCart();
+    }
+
+    function checkout() {
+        
+        // Implement your checkout logic here
+    }
+
+    function toggleCart(event) {
+        event.preventDefault(); // Prevent the default click action
+    
+        const cartDiv = document.getElementById('cart');
+        cartVisible = !cartVisible;
+        cartDiv.classList.toggle('active', cartVisible);
+        updateCart();
+    }
+    
+
+    // Generating product cards dynamically
+    let products = {
+        data: [
+          
+        
+        
+          {
+            productName: "Protagonist hoodie- Bondi Blue S",
+            
+            price: "800",
+            image: "images/p1.jpg",
+            btn:"Add to Cart"
+          },
+        
+        
+          {
+            productName: "Protagonist hoodie- GREY S",
+            
+            price: "800",
+            image: "images/p2.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "Protagonist hoodie- Pepsi Blue S",
+            
+            price: "800",
+            image: "images/p3.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "Protagonist hoodie- Black S",
+            
+            price: "700",
+            image: "images/p4.jpg",
+            btn:"Add to Cart"
+          },
+       
+          {
+            productName: "CREW ASTRO (FOREST GREEN) S",
+            
+            price: "700",
+            image: "images/p5.jpg",
+            btn:"Add to Cart"
+          },
+        
+          {
+            productName: " Livin' Lokal Hoodie (Blue) S",
+            
+            price: "800",
+            image: "images/p6.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " HOODIE ASTRO (MOCHA) S",
+            
+            price: "800",
+            image: "images/p7.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Astro Hoodie (Cream) S",
+            
+            price: "800",
+            image: "images/p8.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Astro Hoodie (Pink Panther) S",
+            
+            price: "800",
+            image: "images/p9.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Livin' Lokal Hoodie (Red) S",
+            
+            price: "800",
+            image: "images/p10.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Oudies Hoodie (Black) S",
+            category: "Men",
+            price: "800",
+            image: "images/p11.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Collective Sky Blue Hoodie S",
+            category: "Men",
+            price: "800",
+            image: "images/p12.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Icons Hoodie (Cream) S",
+            
+            price: "800",
+            image: "images/p13.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Protagonist hoodie- Bondi Blue M",
+           
+            price: "800",
+            image: "images/p1.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Protagonist hoodie- GREY M",
+            
+            price: "800",
+            image: "images/p2.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Protagonist hoodie- Pepsi Blue M",
+            
+            price: "800",
+            image: "images/p3.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Protagonist hoodie- Black M",
+            
+            price: "800",
+            image: "images/p4.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "CREW ASTRO (FOREST GREEN) M",
+            
+            price: "800",
+            image: "images/p5.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Livin' Lokal Hoodie (Blue) M",
+            
+            price: "800",
+            image: "images/p6.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " HOODIE ASTRO (MOCHA) M",
+            
+            price: "800",
+            image: "images/p7.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "Astro Hoodie (Cream) M",
+            
+            price: "800",
+            image: "images/p8.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "Astro Hoodie (Pink Panther) M",
+            
+            price: "800",
+            image: "images/p9.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "Livin' Lokal Hoodie (Red) M",
+            
+            price: "800",
+            image: "images/p10.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Oudies Hoodie (Black)M",
+            
+            price: "800",
+            image: "images/p11.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Collective Sky Blue Hoodie M",
+            
+            price: "800",
+            image: "images/p12.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Icons Hoodie (Cream) M",
+            
+            price: "800",
+            image: "images/p13.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Protagonist hoodie- Bondi Blue L",
+            
+            price: "800",
+            image: "images/p1.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Protagonist hoodie- GREY L",
+            
+            price: "800",
+            image: "images/p2.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "Protagonist hoodie- Pepsi Blue L",
+            
+            price: "800",
+            image: "images/p3.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "Protagonist hoodie- Black L",
+            
+            price: "800",
+            image: "images/p4.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "CREW ASTRO (FOREST GREEN) L",
+            
+            price: "800",
+            image: "images/p5.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Livin' Lokal Hoodie (Blue) L",
+            
+            price: "800",
+            image: "images/p6.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " HOODIE ASTRO (MOCHA) L",
+            
+            price: "800",
+            image: "images/p7.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Astro Hoodie (Cream) L",
+            
+            price: "800",
+            image: "images/p8.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Astro Hoodie (Pink Panther) L",
+            
+            price: "800",
+            image: "images/p9.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Livin' Lokal Hoodie (Red) L",
+            
+            price: "800",
+            image: "images/p10.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Oudies Hoodie (Black) L",
+            
+            price: "800",
+            image: "images/p11.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: "Collective Sky Blue Hoodie L",
+            
+            price: "800",
+            image: "images/p12.jpg",
+            btn:"Add to Cart"
+          },
+          {
+            productName: " Icons Hoodie (Cream) L",
+            
+            price: "800",
+            image: "images/p13.jpg",
+            btn:"Add to Cart"
+          },
+          
+          
+        ],
+      };
+    function filterProducts(searchTerm) {
+        const filteredProducts = products.data.filter(product =>
+            product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        displayProducts(filteredProducts);
+    }
+
+    function displayProducts(productsToDisplay) {
+        const productsContainer = document.getElementById('products');
+        productsContainer.innerHTML = '';
+
+        for (let i of productsToDisplay) {
+            let card = document.createElement("div");
+            card.classList.add("card", i.category);
+
+            let imgContainer = document.createElement("div");
+            imgContainer.classList.add("image-container");
+
+            let image = document.createElement("img");
+            image.setAttribute("src", i.image);
+            imgContainer.appendChild(image);
+
+            card.appendChild(imgContainer);
+
+            let container = document.createElement("div");
+            container.classList.add("container");
+
+            let name = document.createElement("h5");
+            name.classList.add("product-name");
+            name.innerText = i.productName.toUpperCase();
+            container.appendChild(name);
+
+            let price = document.createElement("h6");
+            price.classList.add("price");
+            price.innerText = "LE " + i.price;
+            container.appendChild(price);
+
+            let btn = document.createElement("button");
+            btn.classList.add("add-to-cart");
+            btn.innerText = i.btn;
+            btn.onclick = function () {
+                addToCart(i.productName, parseFloat(i.price), i.image);
+            };
+            container.appendChild(btn);
+
+            card.appendChild(container);
+            productsContainer.appendChild(card);
+        }
+    }
+
+    // Initial display of all products
+    displayProducts(products.data);
+</script>
+
+</body>
+</html>
